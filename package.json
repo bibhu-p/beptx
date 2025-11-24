@@ -1,0 +1,78 @@
+{
+  "name": "reqflow",
+  "version": "1.0.0",
+  "description": "Automatic Real-World API Request Generator & Test Runner for Backend Developers",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "reqflow": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "jest",
+    "test:scanner": "jest --testPathPattern=scanner",
+    "test:generator": "jest --testPathPattern=generator",
+    "test:integration": "jest --testPathPattern=integration",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "keywords": [
+    "api",
+    "testing",
+    "automation",
+    "backend",
+    "express",
+    "fastify",
+    "nextjs",
+    "request-generator",
+    "test-runner",
+    "fuzzing",
+    "api-testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.23.6",
+    "@babel/traverse": "^7.23.6",
+    "@babel/types": "^7.23.6",
+    "axios": "^1.6.5",
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.3",
+    "commander": "^11.1.0",
+    "glob": "^10.3.10",
+    "ora": "^5.4.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/babel__traverse": "^7.20.5",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.6",
+    "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.1",
+    "ts-jest": "^29.1.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/reqflow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/reqflow/issues"
+  },
+  "homepage": "https://github.com/yourusername/reqflow#readme"
+}
