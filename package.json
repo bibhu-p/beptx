@@ -31,7 +31,7 @@
     "fuzzing",
     "api-testing"
   ],
-  "author": "",
+  "author": "Bibhu Prasad",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
@@ -69,10 +69,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/reqflow.git"
+    "url": "https://github.com/bibhu-p/reqflow.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/reqflow/issues"
+    "url": "https://github.com/bibhu-p/reqflow/issues"
   },
-  "homepage": "https://github.com/yourusername/reqflow#readme"
+  "homepage": "https://github.com/bibhu-p/reqflow#readme"
 }
