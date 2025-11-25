@@ -12,7 +12,10 @@ ReqFlow automatically scans your backend routes, generates realistic test payloa
 - 🔒 **Security Testing** - Includes SQL injection and XSS attempts
 - 🎲 **Fuzzing** - Random input generation to catch edge cases
 - ⚡ **Parallel Execution** - Fast test runs with configurable concurrency
-- 📊 **Beautiful Reports** - CLI tables, JSON, and HTML dashboards
+- 📊 **Advanced Analytics** - P50/P95/P99 response times, failure analysis
+- 🎨 **Interactive Charts** - Chart.js powered visualizations
+- 🔍 **Smart Filtering** - Filter by route, status, test type, framework
+- 📈 **Multiple Export Formats** - CLI, JSON, HTML, Markdown, CSV
 - 🛠️ **Zero Configuration** - Works out of the box
 
 ## 📦 Installation
@@ -125,16 +128,21 @@ module.exports = {
 };
 ```
 
-## 📊 Reports
+## 📊 Advanced Reports & Analytics
 
-### CLI Report
+ReqFlow generates comprehensive reports with powerful filtering, analytics, and multiple export formats.
+
+### Report Formats
+
+#### CLI Report
 Beautiful colored tables in your terminal with:
-- Summary statistics
+- Summary statistics with pass rates
 - Pass/fail breakdown by route
 - Detailed failure information
 - Security recommendations
+- Performance insights
 
-### JSON Report
+#### JSON Report
 Structured data perfect for CI/CD integration:
 ```json
 {
@@ -144,16 +152,107 @@ Structured data perfect for CI/CD integration:
     "failed": 5,
     "passRate": "95.8%"
   },
+  "analytics": {
+    "overall": {
+      "avgResponseTime": 145,
+      "p95ResponseTime": 320,
+      "slowestRoute": "POST /api/users"
+    }
+  },
   "results": [...]
 }
 ```
 
-### HTML Dashboard
+#### HTML Dashboard
 Interactive, beautiful HTML report with:
-- Statistics cards
-- Route summaries
-- Failure details
-- Request/response visualization
+- **Statistics cards** with visual progress bars
+- **Interactive charts** (Chart.js powered):
+  - Pass/fail pie chart
+  - Response time bar chart
+  - Test type distribution
+  - Framework comparison
+- **Route summaries** color-coded by status
+- **Failure details** with request/response data
+- **Analytics section** with performance metrics
+
+#### Markdown Report (NEW!)
+GitHub-flavored Markdown perfect for documentation:
+- Summary statistics table
+- Performance metrics (P50, P95, P99)
+- Framework statistics
+- Most common failures
+- Routes summary with emoji indicators
+- Failed test details with code blocks
+
+#### CSV Export (NEW!)
+Excel-compatible CSV for data analysis:
+- All test results in tabular format
+- Import into Excel, Google Sheets, or analytics tools
+- Columns: Test ID, Route, Method, Framework, Status, Response Time, etc.
+
+### Report Filtering & Analytics
+
+Filter and analyze your test results:
+
+```typescript
+import { generateReports } from 'reqflow';
+
+generateReports({
+  report: testReport,
+  outputFormat: ['html', 'markdown', 'csv'],
+  
+  // Filter options
+  filter: {
+    status: 'failed',              // Show only failed tests
+    testTypes: ['sql-injection'],  // Focus on security tests
+    frameworks: ['express'],       // Filter by framework
+    responseTimeMin: 1000,         // Slow responses only
+    routePattern: '/api/users.*'   // Regex pattern matching
+  },
+  
+  // Sorting
+  sortBy: {
+    field: 'responseTime',
+    order: 'desc'                  // Slowest first
+  },
+  
+  // Analytics
+  analytics: true                  // Enable statistical analysis
+});
+```
+
+### Analytics Features
+
+ReqFlow automatically calculates:
+
+- **Response Time Percentiles**: P50, P95, P99
+- **Performance Insights**: Slowest/fastest routes
+- **Framework Statistics**: Compare Express vs Fastify vs Next.js
+- **Test Type Breakdown**: Pass rates by test category
+- **Failure Analysis**: Most common failure types
+- **Route Statistics**: Per-route performance metrics
+
+### Programmatic Report Generation
+
+```typescript
+import { 
+  filterResults, 
+  calculateAnalytics, 
+  generateCharts 
+} from 'reqflow';
+
+// Filter results
+const failedTests = filterResults(results, {
+  status: 'failed'
+});
+
+// Calculate analytics
+const analytics = calculateAnalytics(results);
+console.log(`P95 Response Time: ${analytics.overall.p95ResponseTime}ms`);
+
+// Generate charts for custom dashboards
+const charts = generateCharts(analytics);
+```
 
 ## 🎨 Supported Frameworks
 
@@ -221,10 +320,16 @@ Options:
   --timeout <ms>               Request timeout (default: 5000)
   --sequential                 Run tests sequentially
   --concurrency <number>       Max concurrent requests (default: 10)
-  -o, --output <formats>       Output formats (default: "cli,json,html")
+  -o, --output <formats>       Output formats: cli,json,html,markdown,csv (default: "cli,json,html")
   --output-dir <dir>           Output directory (default: "./reqflow-reports")
   --verbose                    Verbose logging
   --config <path>              Path to config file
+  
+Report Filtering (Coming Soon):
+  --filter-status <status>     Filter by status: passed, failed, all
+  --filter-route <pattern>     Filter by route pattern (regex)
+  --filter-type <types>        Filter by test types (comma-separated)
+  --sort-by <field>            Sort by: name, status, responseTime, timestamp
 ```
 
 ## 🤝 Contributing
@@ -243,6 +348,7 @@ Built with:
 - [commander](https://github.com/tj/commander.js) - CLI framework
 - [chalk](https://github.com/chalk/chalk) - Terminal colors
 - [cli-table3](https://github.com/cli-table/cli-table3) - Tables
+- [Chart.js](https://www.chartjs.org/) - Interactive charts
 
 ---
 
