@@ -2,7 +2,7 @@
  * ReqFlow Configuration File
  * 
  * This file demonstrates all available configuration options.
- * Copy this file to your project root as `reqflow.config.js` and customize as needed.
+ * Copy this file to your project root as `reqflux.config.js` and customize as needed.
  */
 
 module.exports = {
@@ -45,8 +45,8 @@ module.exports = {
     // Output formats: 'cli', 'json', 'html' (default: ['cli', 'json'])
     outputFormat: ['cli', 'json', 'html'],
 
-    // Output directory for reports (default: './reqflow-reports')
-    outputDir: './reqflow-reports',
+    // Output directory for reports (default: './reqflux-reports')
+    outputDir: './reqflux-reports',
 
     // Verbose logging (default: false)
     verbose: false,

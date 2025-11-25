@@ -1,8 +1,8 @@
-# 🚀 ReqFlow
+# 🚀 ReqFlux
 
 **Automatic Real-World API Request Generator & Test Runner for Backend Developers**
 
-ReqFlow automatically scans your backend routes, generates realistic test payloads (including edge cases and security tests), executes them against your API, and produces beautiful reports—all without writing a single test case manually.
+ReqFlux automatically scans your backend routes, generates realistic test payloads (including edge cases and security tests), executes them against your API, and produces beautiful reports—all without writing a single test case manually.
 
 ## ✨ Features
 
@@ -21,13 +21,13 @@ ReqFlow automatically scans your backend routes, generates realistic test payloa
 ## 📦 Installation
 
 ```bash
-npm install -g reqflow
+npm install -g reqflux
 ```
 
 Or use with npx:
 
 ```bash
-npx reqflow test ./src --url http://localhost:3000
+npx reqflux test ./src --url http://localhost:3000
 ```
 
 ## 🚀 Quick Start
@@ -36,17 +36,17 @@ npx reqflow test ./src --url http://localhost:3000
 
 **Run complete test suite:**
 ```bash
-reqflow test ./src --url http://localhost:3000
+reqflux test ./src --url http://localhost:3000
 ```
 
 **Scan routes only:**
 ```bash
-reqflow scan ./src
+reqflux scan ./src
 ```
 
 **With custom options:**
 ```bash
-reqflow test ./src \
+reqflux test ./src \
   --url http://localhost:4000 \
   --variations 15 \
   --output cli,json,html \
@@ -56,9 +56,9 @@ reqflow test ./src \
 ### Programmatic Usage
 
 ```typescript
-import ReqFlow from 'reqflow';
+import ReqFlux from 'reqflux';
 
-const reqflow = new ReqFlow({
+const reqflux = new ReqFlux({
   projectPath: './src',
   baseUrl: 'http://localhost:3000',
   testVariations: 10,
@@ -66,13 +66,13 @@ const reqflow = new ReqFlow({
 });
 
 // Run complete flow
-const report = await reqflow.execute();
+const report = await reqflux.execute();
 
 // Or run step by step
-await reqflow.scan();
-reqflow.generate();
-await reqflow.run();
-reqflow.report();
+await reqflux.scan();
+reqflux.generate();
+await reqflux.run();
+reqflux.report();
 ```
 
 ## 📖 How It Works
@@ -92,7 +92,7 @@ reqflow.report();
 
 ## 🎯 Test Types Generated
 
-For each route, ReqFlow automatically generates:
+For each route, ReqFlux automatically generates:
 
 | Test Type | Description | Expected Result |
 |-----------|-------------|-----------------|
@@ -108,7 +108,7 @@ For each route, ReqFlow automatically generates:
 
 ## 🔧 Configuration
 
-Create a `reqflow.config.js` file in your project root:
+Create a `reqflux.config.js` file in your project root:
 
 ```javascript
 module.exports = {
@@ -121,7 +121,7 @@ module.exports = {
   parallel: true,
   maxConcurrency: 10,
   outputFormat: ['cli', 'json', 'html'],
-  outputDir: './reqflow-reports',
+  outputDir: './reqflux-reports',
   headers: {
     'Authorization': 'Bearer your-token',
   },
@@ -130,7 +130,7 @@ module.exports = {
 
 ## 📊 Advanced Reports & Analytics
 
-ReqFlow generates comprehensive reports with powerful filtering, analytics, and multiple export formats.
+ReqFlux generates comprehensive reports with powerful filtering, analytics, and multiple export formats.
 
 ### Report Formats
 
@@ -195,7 +195,7 @@ Excel-compatible CSV for data analysis:
 Filter and analyze your test results:
 
 ```typescript
-import { generateReports } from 'reqflow';
+import { generateReports } from 'reqflux';
 
 generateReports({
   report: testReport,
@@ -223,7 +223,7 @@ generateReports({
 
 ### Analytics Features
 
-ReqFlow automatically calculates:
+ReqFlux automatically calculates:
 
 - **Response Time Percentiles**: P50, P95, P99
 - **Performance Insights**: Slowest/fastest routes
@@ -239,7 +239,7 @@ import {
   filterResults, 
   calculateAnalytics, 
   generateCharts 
-} from 'reqflow';
+} from 'reqflux';
 
 // Filter results
 const failedTests = filterResults(results, {
@@ -291,7 +291,7 @@ export default function handler(req, res) {
 
 ## 🧠 Schema Inference
 
-ReqFlow intelligently infers data types from:
+ReqFlux intelligently infers data types from:
 
 - **Variable names**: `email` → email type, `age` → number
 - **Common patterns**: `isActive` → boolean, `createdAt` → date
@@ -310,7 +310,7 @@ Automatically tests for:
 ## 📝 CLI Options
 
 ```bash
-reqflow test [options] [project-path]
+reqflux test [options] [project-path]
 
 Options:
   -u, --url <url>              API base URL (default: "http://localhost:3000")
@@ -321,7 +321,7 @@ Options:
   --sequential                 Run tests sequentially
   --concurrency <number>       Max concurrent requests (default: 10)
   -o, --output <formats>       Output formats: cli,json,html,markdown,csv (default: "cli,json,html")
-  --output-dir <dir>           Output directory (default: "./reqflow-reports")
+  --output-dir <dir>           Output directory (default: "./reqflux-reports")
   --verbose                    Verbose logging
   --config <path>              Path to config file
   

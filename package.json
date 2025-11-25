@@ -1,11 +1,11 @@
 {
-  "name": "reqflow",
-  "version": "1.0.0",
+  "name": "reqflux",
+  "version": "0.0.1",
   "description": "Automatic Real-World API Request Generator & Test Runner for Backend Developers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "reqflow": "./dist/cli/index.js"
+    "reqflux": "dist/cli/index.js"
   },
   "scripts": {
     "build": "tsup",
@@ -69,10 +69,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bibhu-p/reqflow.git"
+    "url": "git+https://github.com/bibhu-p/reqflux.git"
   },
   "bugs": {
-    "url": "https://github.com/bibhu-p/reqflow/issues"
+    "url": "https://github.com/bibhu-p/reqflux/issues"
   },
-  "homepage": "https://github.com/bibhu-p/reqflow#readme"
+  "homepage": "https://github.com/bibhu-p/reqflux#readme"
 }
