@@ -1,4 +1,4 @@
-import { Report, TestResult } from '../types';
+import { TestResult, EnhancedReport, ChartConfig } from '../types';
 import { writeFile } from '../utils/file-utils';
 import { logger } from '../utils/logger';
 import * as path from 'path';
@@ -6,7 +6,7 @@ import * as path from 'path';
 /**
  * Generate HTML report
  */
-export function generateHtmlReport(report: Report, outputDir: string): void {
+export function generateHtmlReport(report: EnhancedReport, outputDir: string): void {
   const outputPath = path.join(outputDir, 'reqflow-report.html');
   const html = buildHtmlReport(report);
 
@@ -17,11 +17,11 @@ export function generateHtmlReport(report: Report, outputDir: string): void {
 /**
  * Build HTML report content
  */
-function buildHtmlReport(report: Report): string {
-  const { summary, results, routes, metadata } = report;
+function buildHtmlReport(report: EnhancedReport): string {
+  const { summary, results, routes, metadata, charts, filteredResults } = report;
 
   const passRate = ((summary.passed / summary.total) * 100).toFixed(1);
-  const failedTests = results.filter((r) => !r.passed);
+  const failedTests = (filteredResults || results).filter((r) => !r.passed);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -29,6 +29,7 @@ function buildHtmlReport(report: Report): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ReqFlow Test Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -105,6 +106,33 @@ function buildHtmlReport(report: Report): string {
 
     .stat-value.info {
       color: #667eea;
+    }
+
+    .charts-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
     }
 
     .routes-section {
@@ -281,6 +309,8 @@ function buildHtmlReport(report: Report): string {
       </div>
     </div>
 
+    ${charts && charts.length > 0 ? generateChartsHtml(charts) : ''}
+
     <div class="routes-section">
       <h2>Routes Summary</h2>
       ${generateRoutesSummaryHtml(summary.byRoute)}
@@ -369,6 +399,58 @@ function generateFailuresHtml(failedTests: TestResult[]): string {
   if (failedTests.length > 20) {
     html += `<p style="color: #666; text-align: center;">... and ${failedTests.length - 20} more failures</p>`;
   }
+
+  return html;
+}
+
+/**
+ * Generate charts HTML section
+ */
+function generateChartsHtml(charts: ChartConfig[]): string {
+  let html = '<div class="charts-section">';
+
+  for (let i = 0; i < charts.length; i++) {
+    const chart = charts[i];
+    const chartId = `chart-${i}`;
+
+    html += `
+      <div class="chart-card">
+        <div class="chart-title">${chart.title}</div>
+        <div class="chart-container">
+          <canvas id="${chartId}"></canvas>
+        </div>
+      </div>
+    `;
+  }
+
+  html += '</div>';
+
+  // Add script to initialize charts
+  html += '<script>';
+  for (let i = 0; i < charts.length; i++) {
+    const chart = charts[i];
+    const chartId = `chart-${i}`;
+
+    html += `
+      new Chart(document.getElementById('${chartId}'), {
+        type: '${chart.type}',
+        data: {
+          labels: ${JSON.stringify(chart.labels)},
+          datasets: ${JSON.stringify(chart.datasets)}
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    `;
+  }
+  html += '</script>';
 
   return html;
 }
