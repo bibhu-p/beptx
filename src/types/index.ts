@@ -242,7 +242,157 @@ export interface RunnerOptions {
  */
 export interface ReporterOptions {
     report: Report;
-    outputFormat: ('cli' | 'json' | 'html')[];
+    outputFormat: ('cli' | 'json' | 'html' | 'markdown' | 'csv')[];
     outputDir?: string;
     verbose?: boolean;
+    filter?: ReportFilter;
+    groupBy?: ReportGrouping;
+    sortBy?: ReportSorting;
+    template?: string;
+    analytics?: boolean;
+}
+
+/**
+ * Report filter options
+ */
+export interface ReportFilter {
+    /** Filter by route pattern (regex supported) */
+    routePattern?: string;
+    /** Filter by specific routes */
+    routes?: string[];
+    /** Filter by test status */
+    status?: 'passed' | 'failed' | 'all';
+    /** Filter by test types */
+    testTypes?: TestType[];
+    /** Filter by framework */
+    frameworks?: ('express' | 'fastify' | 'nextjs')[];
+    /** Filter by response time range (ms) */
+    responseTimeMin?: number;
+    responseTimeMax?: number;
+    /** Filter by status codes */
+    statusCodes?: number[];
+}
+
+/**
+ * Report grouping options
+ */
+export type ReportGrouping = 'route' | 'framework' | 'status' | 'testType' | 'none';
+
+/**
+ * Report sorting options
+ */
+export interface ReportSorting {
+    field: 'name' | 'status' | 'responseTime' | 'timestamp';
+    order: 'asc' | 'desc';
+}
+
+/**
+ * Report analytics data
+ */
+export interface ReportAnalytics {
+    /** Overall statistics */
+    overall: {
+        passRate: number;
+        failRate: number;
+        avgResponseTime: number;
+        medianResponseTime: number;
+        p95ResponseTime: number;
+        p99ResponseTime: number;
+        slowestRoute: string;
+        fastestRoute: string;
+    };
+    /** Statistics by framework */
+    byFramework: Map<string, FrameworkStats>;
+    /** Statistics by test type */
+    byTestType: Map<TestType, TestTypeStats>;
+    /** Statistics by route */
+    byRoute: Map<string, RouteStats>;
+    /** Failure analysis */
+    failureAnalysis: {
+        mostCommonFailures: Array<{ type: TestType; count: number }>;
+        routesWithMostFailures: Array<{ route: string; count: number }>;
+    };
+}
+
+/**
+ * Framework statistics
+ */
+export interface FrameworkStats {
+    framework: string;
+    total: number;
+    passed: number;
+    failed: number;
+    passRate: number;
+    avgResponseTime: number;
+}
+
+/**
+ * Test type statistics
+ */
+export interface TestTypeStats {
+    type: TestType;
+    total: number;
+    passed: number;
+    failed: number;
+    passRate: number;
+}
+
+/**
+ * Route statistics
+ */
+export interface RouteStats {
+    route: string;
+    total: number;
+    passed: number;
+    failed: number;
+    passRate: number;
+    avgResponseTime: number;
+    minResponseTime: number;
+    maxResponseTime: number;
+}
+
+/**
+ * Chart configuration
+ */
+export interface ChartConfig {
+    type: 'pie' | 'bar' | 'line' | 'doughnut';
+    title: string;
+    labels: string[];
+    datasets: ChartDataset[];
+    options?: any;
+}
+
+/**
+ * Chart dataset
+ */
+export interface ChartDataset {
+    label: string;
+    data: number[];
+    backgroundColor?: string | string[];
+    borderColor?: string | string[];
+    borderWidth?: number;
+}
+
+/**
+ * Template configuration
+ */
+export interface TemplateConfig {
+    /** Template file path or inline template */
+    template: string;
+    /** Template variables */
+    variables?: Record<string, any>;
+    /** Template type */
+    type: 'file' | 'inline';
+}
+
+/**
+ * Enhanced report with analytics
+ */
+export interface EnhancedReport extends Report {
+    /** Analytics data */
+    analytics?: ReportAnalytics;
+    /** Chart configurations */
+    charts?: ChartConfig[];
+    /** Filtered results */
+    filteredResults?: TestResult[];
 }
