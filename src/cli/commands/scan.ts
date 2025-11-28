@@ -1,9 +1,7 @@
 import { scanRoutes } from '../../scanner';
 import { logger } from '../../utils/logger';
-import { pathExists, readFile } from '../../utils/file-utils';
 import * as path from 'path';
 import Table from 'cli-table3';
-import chalk from 'chalk';
 
 interface ScanCommandOptions {
     frameworks: string;
@@ -44,7 +42,7 @@ export async function scanCommand(projectPath: string, options: ScanCommandOptio
         for (const route of routes) {
             const fileName = route.filePath.split('/').pop() || route.filePath;
             table.push([
-                chalk.bold(route.method),
+                route.method,
                 route.path,
                 route.framework,
                 fileName,
@@ -52,26 +50,26 @@ export async function scanCommand(projectPath: string, options: ScanCommandOptio
         }
 
         console.log(table.toString());
-        console.log(`\n${chalk.green('✓')} Found ${routes.length} routes\n`);
+        console.log(`\n[SUCCESS] Found ${routes.length} routes\n`);
 
         // Show schema info if verbose
         if (options.verbose) {
             for (const route of routes) {
                 if (route.bodySchema || route.querySchema) {
-                    console.log(chalk.bold(`\n${route.method} ${route.path}:`));
+                    console.log(`\n${route.method} ${route.path}:`);
 
                     if (route.bodySchema) {
-                        console.log(chalk.gray('  Body Schema:'));
-                        console.log(chalk.gray(`    ${JSON.stringify(route.bodySchema, null, 2)}`));
+                        console.log('  Body Schema:');
+                        console.log(`    ${JSON.stringify(route.bodySchema, null, 2)}`);
                     }
 
                     if (route.querySchema) {
-                        console.log(chalk.gray('  Query Schema:'));
-                        console.log(chalk.gray(`    ${JSON.stringify(route.querySchema, null, 2)}`));
+                        console.log('  Query Schema:');
+                        console.log(`    ${JSON.stringify(route.querySchema, null, 2)}`);
                     }
 
                     if (route.params && route.params.length > 0) {
-                        console.log(chalk.gray(`  Params: ${route.params.join(', ')}`));
+                        console.log(`  Params: ${route.params.join(', ')}`);
                     }
                 }
             }
