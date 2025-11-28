@@ -346,7 +346,6 @@ Built with:
 - [@babel/parser](https://babeljs.io/) - AST parsing
 - [axios](https://axios-http.com/) - HTTP client
 - [commander](https://github.com/tj/commander.js) - CLI framework
-- [chalk](https://github.com/chalk/chalk) - Terminal colors
 - [cli-table3](https://github.com/cli-table/cli-table3) - Tables
 - [Chart.js](https://www.chartjs.org/) - Interactive charts
 

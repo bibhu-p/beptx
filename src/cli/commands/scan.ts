@@ -50,7 +50,7 @@ export async function scanCommand(projectPath: string, options: ScanCommandOptio
         }
 
         console.log(table.toString());
-        console.log(`\n[SUCCESS] Found ${routes.length} routes\n`);
+        console.log(`\n${'✓'} Found ${routes.length} routes\n`);
 
         // Show schema info if verbose
         if (options.verbose) {
