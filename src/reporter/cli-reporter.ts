@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import Table from 'cli-table3';
 import { Report, TestResult } from '../types';
 
@@ -8,15 +7,12 @@ import { Report, TestResult } from '../types';
 export function generateCliReport(report: Report): void {
     const { summary, results } = report;
 
-    console.log('\n' + chalk.bold.cyan('═'.repeat(80)));
-    console.log(chalk.bold.cyan('  ReqFlow Test Report'));
-    console.log(chalk.bold.cyan('═'.repeat(80)) + '\n');
+ 
 
     // Summary
     printSummary(summary);
 
     // Results by route
-    console.log('\n' + chalk.bold('Results by Route:') + '\n');
 
     for (const [routeKey, routeSummary] of summary.byRoute) {
         printRouteSummary(routeKey, routeSummary);
@@ -25,14 +21,12 @@ export function generateCliReport(report: Report): void {
     // Failed tests details
     const failedTests = results.filter((r) => !r.passed);
     if (failedTests.length > 0) {
-        console.log('\n' + chalk.bold.red('Failed Tests Details:') + '\n');
         printFailedTests(failedTests);
     }
 
     // Recommendations
     printRecommendations(report);
 
-    console.log('\n' + chalk.bold.cyan('═'.repeat(80)) + '\n');
 }
 
 /**
@@ -49,8 +43,8 @@ function printSummary(summary: any): void {
 
     table.push(
         ['Total Tests', summary.total],
-        [chalk.green('Passed'), chalk.green(summary.passed)],
-        [chalk.red('Failed'), chalk.red(summary.failed)],
+        ['Passed', summary.passed],
+        ['Failed', summary.failed],
         ['Pass Rate', `${passRate}%`],
         ['Total Time', `${summary.totalTime}ms`],
         ['Avg Time', `${avgTime}ms`]
@@ -66,11 +60,11 @@ function printRouteSummary(_routeKey: string, routeSummary: any): void {
     const { route, total, passed, failed } = routeSummary;
     const passRate = ((passed / total) * 100).toFixed(0);
 
-    const statusIcon = failed === 0 ? chalk.green('✓') : chalk.red('✗');
-    const routeLabel = chalk.bold(`${route.method} ${route.path}`);
+    const statusIcon = failed === 0 ? '✓' : '✗';
+    const routeLabel = `${route.method} ${route.path}`;
 
     console.log(
-        `${statusIcon} ${routeLabel} - ${chalk.green(passed)}/${total} passed (${passRate}%)`
+        `${statusIcon} ${routeLabel} - ${passed}/${total} passed (${passRate}%)`
     );
 
     if (failed > 0) {
@@ -78,11 +72,11 @@ function printRouteSummary(_routeKey: string, routeSummary: any): void {
         for (const result of failedResults.slice(0, 3)) {
             // Show first 3 failures
             console.log(
-                `  ${chalk.red('→')} ${result.testCase.name}: ${chalk.gray(result.failureReason)}`
+                `  → ${result.testCase.name}: ${result.failureReason}`
             );
         }
         if (failed > 3) {
-            console.log(`  ${chalk.gray(`... and ${failed - 3} more failures`)}`);
+            console.log(`  ... and ${failed - 3} more failures`);
         }
     }
 }
@@ -95,26 +89,26 @@ function printFailedTests(failedTests: TestResult[]): void {
         // Show first 10 failures
         const { testCase, statusCode, failureReason, error } = result;
 
-        console.log(chalk.red('━'.repeat(80)));
-        console.log(chalk.bold(`${testCase.method} ${testCase.route.path}`));
-        console.log(chalk.yellow(`Test: ${testCase.name}`));
-        console.log(chalk.gray(`Type: ${testCase.type}`));
+        console.log('━'.repeat(80));
+        console.log(`${testCase.method} ${testCase.route.path}`);
+        console.log(`Test: ${testCase.name}`);
+        console.log(`Type: ${testCase.type}`);
 
         if (error) {
-            console.log(chalk.red(`Error: ${error}`));
+            console.log(`Error: ${error}`);
         } else {
             console.log(`Status Code: ${statusCode}`);
-            console.log(chalk.red(`Reason: ${failureReason}`));
+            console.log(`Reason: ${failureReason}`);
         }
 
         if (testCase.body) {
-            console.log(chalk.gray('Request Body:'));
-            console.log(chalk.gray(JSON.stringify(testCase.body, null, 2)));
+            console.log('Request Body:');
+            console.log(JSON.stringify(testCase.body, null, 2));
         }
     }
 
     if (failedTests.length > 10) {
-        console.log(chalk.gray(`\n... and ${failedTests.length - 10} more failures`));
+        console.log(`\n... and ${failedTests.length - 10} more failures`);
     }
 }
 
@@ -132,7 +126,7 @@ function printRecommendations(report: Report): void {
 
     if (missingValidation.length > 0) {
         recommendations.push(
-            `${chalk.yellow('⚠')} ${missingValidation.length} route(s) accept requests with missing required fields`
+            `⚠ ${missingValidation.length} route(s) accept requests with missing required fields`
         );
     }
 
@@ -143,7 +137,7 @@ function printRecommendations(report: Report): void {
 
     if (wrongTypeAccepted.length > 0) {
         recommendations.push(
-            `${chalk.yellow('⚠')} ${wrongTypeAccepted.length} route(s) accept wrong data types`
+            `⚠ ${wrongTypeAccepted.length} route(s) accept wrong data types`
         );
     }
 
@@ -156,14 +150,14 @@ function printRecommendations(report: Report): void {
 
     if (securityIssues.length > 0) {
         recommendations.push(
-            `${chalk.red('⚠')} ${securityIssues.length} route(s) may be vulnerable to injection attacks`
+            `⚠ ${securityIssues.length} route(s) may be vulnerable to injection attacks`
         );
     }
 
     if (recommendations.length > 0) {
-        console.log('\n' + chalk.bold.yellow('Recommendations:') + '\n');
+        console.log('\nRecommendations:\n');
         recommendations.forEach((rec) => console.log(`  ${rec}`));
     } else {
-        console.log('\n' + chalk.bold.green('✓ No major issues detected!'));
+        console.log('\n✓ No major issues detected!');
     }
 }

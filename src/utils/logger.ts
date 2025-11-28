@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 
 export enum LogLevel {
     ERROR = 0,
@@ -20,31 +19,31 @@ class Logger {
 
     error(message: string, ...args: any[]) {
         if (this.level >= LogLevel.ERROR) {
-            console.error(chalk.red('✗'), chalk.red(message), ...args);
+            console.error('✗', message, ...args);
         }
     }
 
     warn(message: string, ...args: any[]) {
         if (this.level >= LogLevel.WARN) {
-            console.warn(chalk.yellow('⚠'), chalk.yellow(message), ...args);
+            console.warn('⚠', message, ...args);
         }
     }
 
     info(message: string, ...args: any[]) {
         if (this.level >= LogLevel.INFO) {
-            console.log(chalk.blue('ℹ'), message, ...args);
+            console.log('ℹ', message, ...args);
         }
     }
 
     success(message: string, ...args: any[]) {
         if (this.level >= LogLevel.INFO) {
-            console.log(chalk.green('✓'), chalk.green(message), ...args);
+            console.log('✓', message, ...args);
         }
     }
 
     debug(message: string, ...args: any[]) {
         if (this.level >= LogLevel.DEBUG) {
-            console.log(chalk.gray('⚙'), chalk.gray(message), ...args);
+            console.log('⚙', message, ...args);
         }
     }
 
