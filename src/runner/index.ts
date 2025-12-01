@@ -2,7 +2,7 @@ import { RunnerOptions, TestResult, TestSummary, RouteTestSummary } from '../typ
 import { executeRequestWithRetry } from './http-client';
 import { validateTestResult } from './validator';
 import { logger } from '../utils/logger';
-import createSpinner from 'yocto-spinner';
+import { createSpinner } from '../utils/spinner';
 
 /**
  * Run all test cases
