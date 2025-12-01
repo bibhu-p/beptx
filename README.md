@@ -1,8 +1,8 @@
-# 🚀 ReqFlux
+# 🚀 EndpointX
 
 **Automatic Real-World API Request Generator & Test Runner for Backend Developers**
 
-ReqFlux automatically scans your backend routes, generates realistic test payloads (including edge cases and security tests), executes them against your API, and produces beautiful reports—all without writing a single test case manually.
+EndpointX automatically scans your backend routes, generates realistic test payloads (including edge cases and security tests), executes them against your API, and produces beautiful reports—all without writing a single test case manually.
 
 ## ✨ Features
 
@@ -21,13 +21,13 @@ ReqFlux automatically scans your backend routes, generates realistic test payloa
 ## 📦 Installation
 
 ```bash
-npm install -g reqflux
+npm install -g epx
 ```
 
 Or use with npx:
 
 ```bash
-npx reqflux test ./src --url http://localhost:3000
+npx epx test ./src --url http://localhost:3000
 ```
 
 ## 🚀 Quick Start
@@ -36,17 +36,17 @@ npx reqflux test ./src --url http://localhost:3000
 
 **Run complete test suite:**
 ```bash
-reqflux test ./src --url http://localhost:3000
+epx test ./src --url http://localhost:3000
 ```
 
 **Scan routes only:**
 ```bash
-reqflux scan ./src
+epx scan ./src
 ```
 
 **With custom options:**
 ```bash
-reqflux test ./src \
+epx test ./src \
   --url http://localhost:4000 \
   --variations 15 \
   --output cli,json,html \
@@ -56,9 +56,9 @@ reqflux test ./src \
 ### Programmatic Usage
 
 ```typescript
-import ReqFlux from 'reqflux';
+import EndpointX from 'epx';
 
-const reqflux = new ReqFlux({
+const epx = new EndpointX({
   projectPath: './src',
   baseUrl: 'http://localhost:3000',
   testVariations: 10,
@@ -66,13 +66,13 @@ const reqflux = new ReqFlux({
 });
 
 // Run complete flow
-const report = await reqflux.execute();
+const report = await epx.execute();
 
 // Or run step by step
-await reqflux.scan();
-reqflux.generate();
-await reqflux.run();
-reqflux.report();
+await epx.scan();
+epx.generate();
+await epx.run();
+epx.report();
 ```
 
 ## 📖 How It Works
@@ -92,7 +92,7 @@ reqflux.report();
 
 ## 🎯 Test Types Generated
 
-For each route, ReqFlux automatically generates:
+For each route, EndpointX automatically generates:
 
 | Test Type | Description | Expected Result |
 |-----------|-------------|-----------------|
@@ -108,7 +108,7 @@ For each route, ReqFlux automatically generates:
 
 ## 🔧 Configuration
 
-Create a `reqflux.config.js` file in your project root:
+Create a `epx.config.js` file in your project root:
 
 ```javascript
 module.exports = {
@@ -121,7 +121,7 @@ module.exports = {
   parallel: true,
   maxConcurrency: 10,
   outputFormat: ['cli', 'json', 'html'],
-  outputDir: './reqflux-reports',
+  outputDir: './epx-reports',
   headers: {
     'Authorization': 'Bearer your-token',
   },
@@ -130,7 +130,7 @@ module.exports = {
 
 ## 📊 Advanced Reports & Analytics
 
-ReqFlux generates comprehensive reports with powerful filtering, analytics, and multiple export formats.
+EndpointX generates comprehensive reports with powerful filtering, analytics, and multiple export formats.
 
 ### Report Formats
 
@@ -195,7 +195,7 @@ Excel-compatible CSV for data analysis:
 Filter and analyze your test results:
 
 ```typescript
-import { generateReports } from 'reqflux';
+import { generateReports } from 'epx';
 
 generateReports({
   report: testReport,
@@ -223,7 +223,7 @@ generateReports({
 
 ### Analytics Features
 
-ReqFlux automatically calculates:
+EndpointX automatically calculates:
 
 - **Response Time Percentiles**: P50, P95, P99
 - **Performance Insights**: Slowest/fastest routes
@@ -239,7 +239,7 @@ import {
   filterResults, 
   calculateAnalytics, 
   generateCharts 
-} from 'reqflux';
+} from 'epx';
 
 // Filter results
 const failedTests = filterResults(results, {
@@ -291,7 +291,7 @@ export default function handler(req, res) {
 
 ## 🧠 Schema Inference
 
-ReqFlux intelligently infers data types from:
+EndpointX intelligently infers data types from:
 
 - **Variable names**: `email` → email type, `age` → number
 - **Common patterns**: `isActive` → boolean, `createdAt` → date
@@ -310,7 +310,7 @@ Automatically tests for:
 ## 📝 CLI Options
 
 ```bash
-reqflux test [options] [project-path]
+epx test [options] [project-path]
 
 Options:
   -u, --url <url>              API base URL (default: "http://localhost:3000")
@@ -321,7 +321,7 @@ Options:
   --sequential                 Run tests sequentially
   --concurrency <number>       Max concurrent requests (default: 10)
   -o, --output <formats>       Output formats: cli,json,html,markdown,csv (default: "cli,json,html")
-  --output-dir <dir>           Output directory (default: "./reqflux-reports")
+  --output-dir <dir>           Output directory (default: "./epx-reports")
   --verbose                    Verbose logging
   --config <path>              Path to config file
   

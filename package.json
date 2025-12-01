@@ -1,11 +1,11 @@
 {
-  "name": "@dlazy-coder/be-reqflux-v1",
+  "name": "endpointx",
   "version": "0.0.1",
   "description": "Automatic Real-World API Request Generator & Test Runner for Backend Developers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "reqflux": "dist/cli/index.js"
+    "epx": "dist/cli/index.js"
   },
   "scripts": {
     "build": "tsup",
