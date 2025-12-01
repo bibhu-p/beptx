@@ -1,5 +1,5 @@
 {
-  "name": "endpointx",
+  "name": "@dlazy-coder/epx",
   "version": "0.0.1",
   "description": "Automatic Real-World API Request Generator & Test Runner for Backend Developers",
   "main": "dist/index.js",
