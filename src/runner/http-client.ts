@@ -1,4 +1,3 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
 import { TestCase } from '../types';
 import { logger } from '../utils/logger';
 
@@ -11,7 +10,7 @@ export interface HttpRequestResult {
 }
 
 /**
- * Execute HTTP request
+ * Execute HTTP request using native fetch
  */
 export async function executeRequest(
     testCase: TestCase,
@@ -27,59 +26,83 @@ export async function executeRequest(
             ...testCase.headers,
         };
 
-        const config = {
-            method: testCase.method,
-            url: testCase.url,
-            headers,
-            timeout,
-            validateStatus: () => true, // Don't throw on any status code
-            params: testCase.query,
-            data: testCase.body,
-        };
+        // Build URL with query parameters
+        const url = new URL(testCase.url);
+        if (testCase.query) {
+            Object.entries(testCase.query).forEach(([key, value]) => {
+                url.searchParams.append(key, String(value));
+            });
+        }
 
         logger.debug(`Executing: ${testCase.method} ${testCase.url}`);
 
-        const response: AxiosResponse = await axios(config);
-        const responseTime = Date.now() - startTime;
+        // Create abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-        return {
-            statusCode: response.status,
-            responseBody: response.data,
-            responseHeaders: response.headers as Record<string, string>,
-            responseTime,
-        };
-    } catch (error) {
-        const responseTime = Date.now() - startTime;
+        try {
+            const response = await fetch(url.toString(), {
+                method: testCase.method,
+                headers,
+                body: testCase.body ? JSON.stringify(testCase.body) : undefined,
+                signal: controller.signal,
+            });
 
-        if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError;
+            clearTimeout(timeoutId);
+            const responseTime = Date.now() - startTime;
 
-            if (axiosError.response) {
-                // Server responded with error status
-                return {
-                    statusCode: axiosError.response.status,
-                    responseBody: axiosError.response.data,
-                    responseHeaders: axiosError.response.headers as Record<string, string>,
-                    responseTime,
-                };
-            } else if (axiosError.code === 'ECONNREFUSED') {
-                return {
-                    responseTime,
-                    error: 'Connection refused - is the server running?',
-                };
-            } else if (axiosError.code === 'ETIMEDOUT') {
+            // Parse response body
+            let responseBody: any;
+            const contentType = response.headers.get('content-type');
+            if (contentType?.includes('application/json')) {
+                try {
+                    responseBody = await response.json();
+                } catch {
+                    responseBody = await response.text();
+                }
+            } else {
+                responseBody = await response.text();
+            }
+
+            // Convert headers to plain object
+            const responseHeaders: Record<string, string> = {};
+            response.headers.forEach((value, key) => {
+                responseHeaders[key] = value;
+            });
+
+            return {
+                statusCode: response.status,
+                responseBody,
+                responseHeaders,
+                responseTime,
+            };
+        } catch (fetchError: any) {
+            clearTimeout(timeoutId);
+            const responseTime = Date.now() - startTime;
+
+            // Handle abort (timeout)
+            if (fetchError.name === 'AbortError') {
                 return {
                     responseTime,
                     error: 'Request timeout',
                 };
-            } else {
+            }
+
+            // Handle connection errors
+            if (fetchError.cause?.code === 'ECONNREFUSED') {
                 return {
                     responseTime,
-                    error: axiosError.message,
+                    error: 'Connection refused - is the server running?',
                 };
             }
-        }
 
+            return {
+                responseTime,
+                error: fetchError.message || 'Network error',
+            };
+        }
+    } catch (error) {
+        const responseTime = Date.now() - startTime;
         return {
             responseTime,
             error: error instanceof Error ? error.message : 'Unknown error',
