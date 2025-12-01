@@ -1,7 +1,7 @@
 import { scanRoutes } from '../../scanner';
 import { logger } from '../../utils/logger';
 import * as path from 'path';
-import Table from 'cli-table3';
+import { formatTable } from '../../utils/table-formatter';
 
 interface ScanCommandOptions {
     frameworks: string;
@@ -34,23 +34,14 @@ export async function scanCommand(projectPath: string, options: ScanCommandOptio
         }
 
         // Display routes in table
-        const table = new Table({
-            head: ['Method', 'Path', 'Framework', 'File'],
-            style: { head: ['cyan'] },
+        const headers = ['Method', 'Path', 'Framework', 'File'];
+        const rows = routes.map((route) => {
+            const fileName = route.filePath.split('/').pop() || route.filePath;
+            return [route.method, route.path, route.framework, fileName];
         });
 
-        for (const route of routes) {
-            const fileName = route.filePath.split('/').pop() || route.filePath;
-            table.push([
-                route.method,
-                route.path,
-                route.framework,
-                fileName,
-            ]);
-        }
-
-        console.log(table.toString());
-        console.log(`\n${'✓'} Found ${routes.length} routes\n`);
+        console.log(formatTable(headers, rows));
+        console.log(`\n[SUCCESS] Found ${routes.length} routes\n`);
 
         // Show schema info if verbose
         if (options.verbose) {
