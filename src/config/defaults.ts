@@ -1,16 +1,16 @@
-import { ReqFlowConfig } from '../types';
+import { EndpointXConfig } from '../types';
 
 /**
  * Default configuration values
  */
-export const DEFAULT_CONFIG: Partial<ReqFlowConfig> = {
+export const DEFAULT_CONFIG: Partial<EndpointXConfig> = {
     testVariations: 10,
     enableFuzzing: true,
     timeout: 5000,
     parallel: true,
     maxConcurrency: 10,
     outputFormat: ['cli', 'json'],
-    outputDir: './reqflow-reports',
+    outputDir: './endpointx-reports',
     verbose: false,
     retryFailedRequests: 0,
     exclude: [

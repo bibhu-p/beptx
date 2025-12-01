@@ -7,7 +7,7 @@ import { scanCommand } from './commands/scan';
 const program = new Command();
 
 program
-    .name('reqflow')
+    .name('endpointx')
     .description('Automatic API Request Generator & Test Runner')
     .version('1.0.0');
 
@@ -24,7 +24,7 @@ program
     .option('--sequential', 'Run tests sequentially instead of parallel')
     .option('--concurrency <number>', 'Max concurrent requests', '10')
     .option('-o, --output <formats>', 'Output formats (comma-separated)', 'cli,json,html')
-    .option('--output-dir <dir>', 'Output directory for reports', './reqflow-reports')
+    .option('--output-dir <dir>', 'Output directory for reports', './endpointx-reports')
     .option('--verbose', 'Verbose logging')
     .option('--config <path>', 'Path to config file')
     .action(testCommand);

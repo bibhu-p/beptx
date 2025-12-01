@@ -7,7 +7,7 @@ import * as path from 'path';
  * Generate CSV report
  */
 export function generateCsvReport(report: EnhancedReport, outputDir: string): void {
-    const outputPath = path.join(outputDir, 'reqflow-report.csv');
+    const outputPath = path.join(outputDir, 'endpointx-report.csv');
     const csv = buildCsvReport(report);
 
     writeFile(outputPath, csv);

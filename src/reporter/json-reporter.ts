@@ -7,7 +7,7 @@ import * as path from 'path';
  * Generate JSON report
  */
 export function generateJsonReport(report: Report, outputDir: string): void {
-    const outputPath = path.join(outputDir, 'reqflow-report.json');
+    const outputPath = path.join(outputDir, 'endpointx-report.json');
 
     // Convert Map to object for JSON serialization
     const serializedReport = {

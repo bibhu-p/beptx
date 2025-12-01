@@ -18,7 +18,7 @@ export function generateReports(options: ReporterOptions): void {
     const {
         report,
         outputFormat,
-        outputDir = './reqflow-reports',
+        outputDir = './endpointx-reports',
         verbose,
         filter,
         groupBy,

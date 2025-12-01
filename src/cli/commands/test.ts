@@ -1,5 +1,5 @@
-import { ReqFlow } from '../../index';
-import { ReqFlowConfig } from '../../types';
+import { EndpointX } from '../../index';
+import { EndpointXConfig } from '../../types';
 import { logger } from '../../utils/logger';
 import { pathExists, readFile } from '../../utils/file-utils';
 import * as path from 'path';
@@ -24,13 +24,13 @@ interface TestCommandOptions {
 export async function testCommand(projectPath: string, options: TestCommandOptions) {
     try {
         // Load config from file if specified
-        let fileConfig: Partial<ReqFlowConfig> = {};
+        let fileConfig: Partial<EndpointXConfig> = {};
         if (options.config) {
             fileConfig = await loadConfig(options.config);
         }
 
         // Build config from CLI options
-        const config: Partial<ReqFlowConfig> = {
+        const config: Partial<EndpointXConfig> = {
             ...fileConfig,
             projectPath: path.resolve(projectPath),
             baseUrl: options.url,
@@ -49,11 +49,11 @@ export async function testCommand(projectPath: string, options: TestCommandOptio
             logger.setVerbose(true);
         }
 
-        logger.info('Starting ReqFlow test execution...\n');
+        logger.info('Starting EndpointX test execution...\n');
 
-        // Create ReqFlow instance and execute
-        const reqflow = new ReqFlow(config);
-        const report = await reqflow.execute();
+        // Create EndpointX instance and execute
+        const epx = new EndpointX(config);
+        const report = await epx.execute();
 
         // Exit with error code if tests failed
         if (report.summary.failed > 0) {
@@ -69,7 +69,7 @@ export async function testCommand(projectPath: string, options: TestCommandOptio
 /**
  * Load configuration from file
  */
-async function loadConfig(configPath: string): Promise<Partial<ReqFlowConfig>> {
+async function loadConfig(configPath: string): Promise<Partial<EndpointXConfig>> {
     const resolvedPath = path.resolve(configPath);
 
     if (!pathExists(resolvedPath)) {

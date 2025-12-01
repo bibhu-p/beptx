@@ -146,9 +146,9 @@ export interface RouteTestSummary {
 }
 
 /**
- * ReqFlow configuration
+ * EndpointX configuration
  */
-export interface ReqFlowConfig {
+export interface EndpointXConfig {
     /** Project directory to scan */
     projectPath: string;
     /** API base URL */
@@ -186,7 +186,7 @@ export interface ReqFlowConfig {
  */
 export interface Report {
     /** Configuration used */
-    config: ReqFlowConfig;
+    config: EndpointXConfig;
     /** Test summary */
     summary: TestSummary;
     /** All test results */

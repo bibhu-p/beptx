@@ -1,4 +1,4 @@
-import { ReqFlowConfig, Route, TestCase, TestResult, Report } from './types';
+import { EndpointXConfig, Route, TestCase, TestResult, Report } from './types';
 import { DEFAULT_CONFIG } from './config/defaults';
 import { scanRoutes } from './scanner';
 import { generateTests } from './generator';
@@ -7,16 +7,16 @@ import { generateReports } from './reporter';
 import { logger } from './utils/logger';
 
 /**
- * Main ReqFlow class for fluent API
+ * Main EndpointX class for fluent API
  */
-export class ReqFlow {
-    private config: ReqFlowConfig;
+export class EndpointX {
+    private config: EndpointXConfig;
     private routes: Route[] = [];
     private testCases: TestCase[] = [];
     private results: TestResult[] = [];
 
-    constructor(config: Partial<ReqFlowConfig>) {
-        this.config = { ...DEFAULT_CONFIG, ...config } as ReqFlowConfig;
+    constructor(config: Partial<EndpointXConfig>) {
+        this.config = { ...DEFAULT_CONFIG, ...config } as EndpointXConfig;
 
         if (this.config.verbose) {
             logger.setVerbose(true);
@@ -159,4 +159,4 @@ export * from './types';
 /**
  * Default export
  */
-export default ReqFlow;
+export default EndpointX;

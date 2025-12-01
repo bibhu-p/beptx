@@ -1,7 +1,7 @@
 {
-    "name": "reqflow-example-express",
+    "name": "endpointx-example-express",
     "version": "1.0.0",
-    "description": "Example Express app for ReqFlow testing",
+    "description": "Example Express app for EndpointX testing",
     "main": "server.js",
     "scripts": {
         "start": "node server.js"
