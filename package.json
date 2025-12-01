@@ -43,8 +43,8 @@
     "axios": "^1.6.5",
     "commander": "^11.1.0",
     "glob": "^10.3.10",
-    "ora": "^5.4.1",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "yocto-spinner": "^0.1.0"
   },
   "devDependencies": {
     "@types/babel__traverse": "^7.20.5",
