@@ -1,5 +1,5 @@
 import { parse } from '@babel/parser';
-import traverse, { NodePath } from '@babel/traverse';
+import traverse from '@babel/traverse';
 import * as t from '@babel/types';
 import { readFile } from '../utils/file-utils';
 
@@ -134,32 +134,76 @@ export function extractFunctionParams(node: t.Node): string[] {
 }
 
 /**
+ * Find member expression accesses (e.g., req.body.email) in a node
+ */
+function findMemberAccessesInNode(
+    node: t.Node,
+    objectName: string,
+    propertyName: string,
+    accesses: string[]
+): void {
+    // Check if current node is a member expression we're looking for
+    if (
+        t.isMemberExpression(node) &&
+        t.isMemberExpression(node.object) &&
+        t.isIdentifier(node.object.object) &&
+        node.object.object.name === objectName &&
+        t.isIdentifier(node.object.property) &&
+        node.object.property.name === propertyName &&
+        t.isIdentifier(node.property)
+    ) {
+        accesses.push(node.property.name);
+    }
+
+    // Recursively traverse child nodes
+    for (const key in node) {
+        const child = (node as any)[key];
+        if (child && typeof child === 'object') {
+            if (Array.isArray(child)) {
+                for (const item of child) {
+                    if (item && typeof item === 'object' && item.type) {
+                        findMemberAccessesInNode(item, objectName, propertyName, accesses);
+                    }
+                }
+            } else if (child.type) {
+                findMemberAccessesInNode(child, objectName, propertyName, accesses);
+            }
+        }
+    }
+}
+
+/**
  * Find member expression accesses (e.g., req.body.email)
  */
 export function findMemberAccesses(
-    ast: t.File,
+    astOrNode: t.File | t.Node,
     objectName: string,
     propertyName: string
 ): string[] {
     const accesses: string[] = [];
 
-    traverse(ast, {
-        MemberExpression(path) {
-            // Check for patterns like req.body.fieldName
-            const node = path.node;
+    // If it's a File, use traverse
+    if (t.isFile(astOrNode)) {
+        traverse(astOrNode, {
+            MemberExpression(path) {
+                const node = path.node;
 
-            if (
-                t.isMemberExpression(node.object) &&
-                t.isIdentifier(node.object.object) &&
-                node.object.object.name === objectName &&
-                t.isIdentifier(node.object.property) &&
-                node.object.property.name === propertyName &&
-                t.isIdentifier(node.property)
-            ) {
-                accesses.push(node.property.name);
-            }
-        },
-    });
+                if (
+                    t.isMemberExpression(node.object) &&
+                    t.isIdentifier(node.object.object) &&
+                    node.object.object.name === objectName &&
+                    t.isIdentifier(node.object.property) &&
+                    node.object.property.name === propertyName &&
+                    t.isIdentifier(node.property)
+                ) {
+                    accesses.push(node.property.name);
+                }
+            },
+        });
+    } else {
+        // For individual nodes, use manual traversal
+        findMemberAccessesInNode(astOrNode, objectName, propertyName, accesses);
+    }
 
     return Array.from(new Set(accesses));
 }
