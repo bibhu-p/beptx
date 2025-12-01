@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { glob } from 'glob';
+import * as fsPromises from 'node:fs/promises';
 
 /**
  * Check if a path exists
@@ -43,6 +43,35 @@ export function writeFile(filePath: string, content: string): void {
 }
 
 /**
+ * Check if a file path matches any exclude pattern
+ */
+function matchesExcludePattern(filePath: string, excludePatterns: string[]): boolean {
+    return excludePatterns.some((pattern) => {
+        // Convert glob pattern to regex
+        const regexPattern = pattern
+            .replace(/\*\*/g, '.*')
+            .replace(/\*/g, '[^/]*')
+            .replace(/\?/g, '.');
+        const regex = new RegExp(regexPattern);
+        return regex.test(filePath);
+    });
+}
+
+/**
+ * Check if a file path matches a glob pattern
+ */
+function matchesPattern(filePath: string, pattern: string): boolean {
+    // Convert glob pattern to regex
+    const regexPattern = pattern
+        .replace(/\*\*/g, '.*')
+        .replace(/\*/g, '[^/]*')
+        .replace(/\?/g, '.')
+        .replace(/\./g, '\\.');
+    const regex = new RegExp(`^${regexPattern}$`);
+    return regex.test(filePath);
+}
+
+/**
  * Find files matching patterns
  */
 export async function findFiles(
@@ -52,14 +81,30 @@ export async function findFiles(
 ): Promise<string[]> {
     const allFiles: string[] = [];
 
-    for (const pattern of patterns) {
-        const files = await glob(pattern, {
-            cwd: baseDir,
-            absolute: true,
-            ignore: excludePatterns,
-            nodir: true,
-        });
-        allFiles.push(...files);
+    // Read all files recursively using native Node.js API (Node 20+)
+    const entries = await fsPromises.readdir(baseDir, { recursive: true, withFileTypes: true });
+
+    for (const entry of entries) {
+        // Skip directories
+        if (!entry.isFile()) continue;
+
+        // Get relative path
+        const relativePath = entry.parentPath
+            ? path.relative(baseDir, path.join(entry.parentPath, entry.name))
+            : entry.name;
+
+        // Check if excluded
+        if (matchesExcludePattern(relativePath, excludePatterns)) {
+            continue;
+        }
+
+        // Check if matches any pattern
+        const matchesAnyPattern = patterns.some((pattern) => matchesPattern(relativePath, pattern));
+
+        if (matchesAnyPattern) {
+            const absolutePath = path.resolve(baseDir, relativePath);
+            allFiles.push(absolutePath);
+        }
     }
 
     // Remove duplicates
