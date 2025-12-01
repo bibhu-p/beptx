@@ -1,5 +1,5 @@
-import Table from 'cli-table3';
 import { Report, TestResult } from '../types';
+import { formatTable } from '../utils/table-formatter';
 
 /**
  * Generate CLI report
@@ -41,21 +41,17 @@ function printSummary(summary: any): void {
     const passRate = ((summary.passed / summary.total) * 100).toFixed(1);
     const avgTime = (summary.totalTime / summary.total).toFixed(0);
 
-    const table = new Table({
-        head: ['Metric', 'Value'],
-        style: { head: ['cyan'] },
-    });
-
-    table.push(
+    const headers = ['Metric', 'Value'];
+    const rows = [
         ['Total Tests', summary.total],
         ['[PASSED]', summary.passed],
         ['[FAILED]', summary.failed],
         ['Pass Rate', `${passRate}%`],
         ['Total Time', `${summary.totalTime}ms`],
-        ['Avg Time', `${avgTime}ms`]
-    );
+        ['Avg Time', `${avgTime}ms`],
+    ];
 
-    console.log(table.toString());
+    console.log(formatTable(headers, rows));
 }
 
 /**
