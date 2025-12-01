@@ -6,7 +6,7 @@ import {
     generateXssAttempt,
     generateFuzzValue,
 } from './payload-generator';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 
 /**
  * Build test cases for a route
@@ -54,7 +54,7 @@ function buildValidTestCase(route: Route, baseUrl: string): TestCase {
     const url = buildUrl(baseUrl, route.path, route.params);
 
     return {
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: 'Valid request',
         type: 'valid',
@@ -87,7 +87,7 @@ function buildInvalidBodyTestCases(route: Route, baseUrl: string): TestCase[] {
         delete body[fieldToRemove];
 
         testCases.push({
-            id: uuidv4(),
+            id: randomUUID(),
             route,
             name: `Missing required field: ${fieldToRemove}`,
             type: 'missing-required',
@@ -105,7 +105,7 @@ function buildInvalidBodyTestCases(route: Route, baseUrl: string): TestCase[] {
     wrongTypeBody[firstField] = generateInvalidValue(schema[firstField], 'wrong-type');
 
     testCases.push({
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: `Wrong type for field: ${firstField}`,
         type: 'wrong-type',
@@ -121,7 +121,7 @@ function buildInvalidBodyTestCases(route: Route, baseUrl: string): TestCase[] {
     emptyStringBody[firstField] = '';
 
     testCases.push({
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: `Empty string for field: ${firstField}`,
         type: 'empty-string',
@@ -137,7 +137,7 @@ function buildInvalidBodyTestCases(route: Route, baseUrl: string): TestCase[] {
     nullBody[firstField] = null;
 
     testCases.push({
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: `Null value for field: ${firstField}`,
         type: 'null-value',
@@ -152,7 +152,7 @@ function buildInvalidBodyTestCases(route: Route, baseUrl: string): TestCase[] {
     const extraFieldsBody = { ...generateValidPayload(schema), unexpectedField: 'should not be here' };
 
     testCases.push({
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: 'Extra unexpected fields',
         type: 'extra-fields',
@@ -184,7 +184,7 @@ function buildInvalidQueryTestCases(route: Route, baseUrl: string): TestCase[] {
     query[firstField] = generateInvalidValue(schema[firstField], 'wrong-type');
 
     testCases.push({
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: `Wrong type for query param: ${firstField}`,
         type: 'wrong-type',
@@ -211,7 +211,7 @@ function buildInvalidParamTestCases(route: Route, baseUrl: string): TestCase[] {
     }, {} as Record<string, string>);
 
     testCases.push({
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: 'Invalid URL parameters',
         type: 'invalid-param',
@@ -246,7 +246,7 @@ function buildSecurityTestCases(route: Route, baseUrl: string): TestCase[] {
     sqlBody[firstField] = generateSqlInjection();
 
     testCases.push({
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: 'SQL Injection attempt',
         type: 'sql-injection',
@@ -262,7 +262,7 @@ function buildSecurityTestCases(route: Route, baseUrl: string): TestCase[] {
     xssBody[firstField] = generateXssAttempt();
 
     testCases.push({
-        id: uuidv4(),
+        id: randomUUID(),
         route,
         name: 'XSS attempt',
         type: 'xss-attempt',
@@ -287,7 +287,7 @@ function buildFuzzingTestCases(route: Route, baseUrl: string, count: number): Te
         const query = route.querySchema ? generateFuzzedPayload(route.querySchema) : undefined;
 
         testCases.push({
-            id: uuidv4(),
+            id: randomUUID(),
             route,
             name: `Fuzz test ${i + 1}`,
             type: 'fuzzing',
