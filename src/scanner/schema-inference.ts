@@ -4,8 +4,6 @@ import { FIELD_TYPE_MAPPINGS } from '../config/defaults';
 import {
     parseFile,
     findMemberAccesses,
-    extractFunctionParams,
-    extractRouteHandler,
 } from './ast-utils';
 
 /**
@@ -13,7 +11,7 @@ import {
  */
 export function inferSchemaFromHandler(
     filePath: string,
-    handlerNode: t.Node | null
+    handlerNode: t.Node | null = null
 ): {
     bodySchema?: FieldSchema;
     querySchema?: FieldSchema;
@@ -23,8 +21,12 @@ export function inferSchemaFromHandler(
         return {};
     }
 
-    const bodyFields = findMemberAccesses(ast, 'req', 'body');
-    const queryFields = findMemberAccesses(ast, 'req', 'query');
+    // If handlerNode is provided, analyze only that handler
+    // Otherwise, analyze the entire file (fallback for when handler can't be extracted)
+    const targetNode = handlerNode || ast;
+
+    const bodyFields = findMemberAccesses(targetNode, 'req', 'body');
+    const queryFields = findMemberAccesses(targetNode, 'req', 'query');
 
     return {
         bodySchema: bodyFields.length > 0 ? inferFieldTypes(bodyFields) : undefined,
