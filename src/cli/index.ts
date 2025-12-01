@@ -8,7 +8,7 @@ const HELP_TEXT = `
 endpointx - Automatic API Request Generator & Test Runner
 
 Usage:
-  epx <command> [options]
+  beptx <command> [options]
 
 Commands:
   test [project-path]    Scan routes, generate tests, and run them
@@ -34,9 +34,9 @@ Scan Command Options:
   --config <path>              Path to config file
 
 Examples:
-  epx test ./src --url http://localhost:3000
-  epx scan ./src
-  epx test --variations 15 --output cli,json,html
+  beptx test ./src --url http://localhost:3000
+  beptx scan ./src
+  beptx test --variations 15 --output cli,json,html
 
 Version: 1.0.0
 `;
@@ -129,6 +129,6 @@ if (command === 'test') {
     }
 } else {
     console.error(`Unknown command: ${command}`);
-    console.log('Run "epx help" for usage information');
+    console.log('Run "beptx help" for usage information');
     process.exit(1);
 }

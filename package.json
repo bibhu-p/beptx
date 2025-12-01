@@ -1,11 +1,11 @@
 {
-  "name": "@dlazy-coder/epx",
+  "name": "@dlazy-coder/beptx",
   "version": "0.0.1",
   "description": "Automatic Real-World API Request Generator & Test Runner for Backend Developers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "epx": "dist/cli/index.js"
+    "beptx": "dist/cli/index.js"
   },
   "scripts": {
     "build": "tsup",

@@ -21,13 +21,13 @@ EndpointX automatically scans your backend routes, generates realistic test payl
 ## 📦 Installation
 
 ```bash
-npm install -g epx
+npm install -g beptx
 ```
 
 Or use with npx:
 
 ```bash
-npx epx test ./src --url http://localhost:3000
+npx beptx test ./src --url http://localhost:3000
 ```
 
 ## 🚀 Quick Start
@@ -36,17 +36,17 @@ npx epx test ./src --url http://localhost:3000
 
 **Run complete test suite:**
 ```bash
-epx test ./src --url http://localhost:3000
+beptx test ./src --url http://localhost:3000
 ```
 
 **Scan routes only:**
 ```bash
-epx scan ./src
+beptx scan ./src
 ```
 
 **With custom options:**
 ```bash
-epx test ./src \
+beptx test ./src \
   --url http://localhost:4000 \
   --variations 15 \
   --output cli,json,html \
@@ -56,9 +56,9 @@ epx test ./src \
 ### Programmatic Usage
 
 ```typescript
-import EndpointX from 'epx';
+import EndpointX from 'beptx';
 
-const epx = new EndpointX({
+const beptx = new EndpointX({
   projectPath: './src',
   baseUrl: 'http://localhost:3000',
   testVariations: 10,
@@ -66,13 +66,13 @@ const epx = new EndpointX({
 });
 
 // Run complete flow
-const report = await epx.execute();
+const report = await beptx.execute();
 
 // Or run step by step
-await epx.scan();
-epx.generate();
-await epx.run();
-epx.report();
+await beptx.scan();
+beptx.generate();
+await beptx.run();
+beptx.report();
 ```
 
 ## 📖 How It Works
@@ -108,7 +108,7 @@ For each route, EndpointX automatically generates:
 
 ## 🔧 Configuration
 
-Create a `epx.config.js` file in your project root:
+Create a `beptx.config.js` file in your project root:
 
 ```javascript
 module.exports = {
@@ -121,7 +121,7 @@ module.exports = {
   parallel: true,
   maxConcurrency: 10,
   outputFormat: ['cli', 'json', 'html'],
-  outputDir: './epx-reports',
+  outputDir: './beptx-reports',
   headers: {
     'Authorization': 'Bearer your-token',
   },
@@ -195,7 +195,7 @@ Excel-compatible CSV for data analysis:
 Filter and analyze your test results:
 
 ```typescript
-import { generateReports } from 'epx';
+import { generateReports } from 'beptx';
 
 generateReports({
   report: testReport,
@@ -239,7 +239,7 @@ import {
   filterResults, 
   calculateAnalytics, 
   generateCharts 
-} from 'epx';
+} from 'beptx';
 
 // Filter results
 const failedTests = filterResults(results, {
@@ -310,7 +310,7 @@ Automatically tests for:
 ## 📝 CLI Options
 
 ```bash
-epx test [options] [project-path]
+beptx test [options] [project-path]
 
 Options:
   -u, --url <url>              API base URL (default: "http://localhost:3000")
@@ -321,7 +321,7 @@ Options:
   --sequential                 Run tests sequentially
   --concurrency <number>       Max concurrent requests (default: 10)
   -o, --output <formats>       Output formats: cli,json,html,markdown,csv (default: "cli,json,html")
-  --output-dir <dir>           Output directory (default: "./epx-reports")
+  --output-dir <dir>           Output directory (default: "./beptx-reports")
   --verbose                    Verbose logging
   --config <path>              Path to config file
   
