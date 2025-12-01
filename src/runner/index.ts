@@ -2,7 +2,7 @@ import { RunnerOptions, TestResult, TestSummary, RouteTestSummary } from '../typ
 import { executeRequestWithRetry } from './http-client';
 import { validateTestResult } from './validator';
 import { logger } from '../utils/logger';
-import ora from 'ora';
+import createSpinner from 'yocto-spinner';
 
 /**
  * Run all test cases
@@ -24,7 +24,7 @@ export async function runTests(options: RunnerOptions): Promise<TestResult[]> {
 
     logger.info(`Running ${testCases.length} test cases...`);
 
-    const spinner = ora('Executing tests...').start();
+    const spinner = createSpinner({ text: 'Executing tests...' }).start();
     const results: TestResult[] = [];
 
     if (parallel) {
@@ -54,7 +54,7 @@ export async function runTests(options: RunnerOptions): Promise<TestResult[]> {
         }
     }
 
-    spinner.succeed(`Completed ${results.length} tests`);
+    spinner.success(`Completed ${results.length} tests`);
 
     return results;
 }
