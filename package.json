@@ -1,5 +1,5 @@
 {
-  "name": "reqflux",
+  "name": "@dlazy-coder/be-reqflux-v1",
   "version": "0.0.1",
   "description": "Automatic Real-World API Request Generator & Test Runner for Backend Developers",
   "main": "dist/index.js",
@@ -34,7 +34,7 @@
   "author": "Bibhu Prasad",
   "license": "MIT",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@babel/parser": "^7.23.6",
@@ -42,7 +42,6 @@
     "@babel/types": "^7.23.6",
     "axios": "^1.6.5",
     "commander": "^11.1.0",
-    "glob": "^10.3.10",
     "uuid": "^9.0.1",
     "yocto-spinner": "^0.1.0"
   },
@@ -64,13 +63,5 @@
     "dist",
     "README.md",
     "LICENSE"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bibhu-p/reqflux.git"
-  },
-  "bugs": {
-    "url": "https://github.com/bibhu-p/reqflux/issues"
-  },
-  "homepage": "https://github.com/bibhu-p/reqflux#readme"
+  ]
 }
