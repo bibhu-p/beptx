@@ -1,4 +1,4 @@
-# 🚀 EndpointX
+# 🚀 Backend-EndpointX
 
 **Automatic Real-World API Request Generator & Test Runner for Backend Developers**
 
